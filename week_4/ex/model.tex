@@ -1,0 +1,377 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  english,
+  doc]{apa6}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={A little MPT Tutorial},
+  pdflang={en-EN},
+  pdfkeywords={keywords},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{xcolor}
+\usepackage{hhline}
+\usepackage{mathtools}
+\usepackage{gb4e}\noautomath
+
+\usepackage[normalem]{ulem}
+
+\def \todo#1 { \colorbox{yellow!30}{#1} }
+\usepackage[edges]{forest}
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\begin{center}\begin{threeparttable}}
+%   {\end{threeparttable}\end{center}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% \usepackage{etoolbox}
+\makeatletter
+\patchcmd{\HyOrg@maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\makeatother
+\shorttitle{A little MPT Tutorial}
+\author{Pavel Logačev\textsuperscript{1}}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} Boğaziçi University University, Istanbul, Turkey}
+\authornote{Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+Enter author note here.
+
+
+Correspondence concerning this article should be addressed to Pavel Logačev, Postal address. E-mail: pavel.logacev@boun.edu.tr}
+\keywords{keywords\newline\indent Word count: X}
+\usepackage{csquotes}
+\ifxetex
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[]{english}
+\else
+  \usepackage[shorthands=off,main=english]{babel}
+\fi
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{A little MPT Tutorial}
+
+\date{}
+
+\abstract{
+This is very cool work on an extremely interesting topic.
+}
+
+\begin{document}
+\maketitle
+
+\hypertarget{a-multinomial-processing-tree-generative-model}{%
+\subsection{A multinomial processing tree generative model}\label{a-multinomial-processing-tree-generative-model}}
+
+\hypertarget{the-model}{%
+\subsubsection{The model}\label{the-model}}
+
+\begin{forest}
+for tree = {
+% nodes
+    draw, 
+    align=center,
+    minimum height=5ex,
+    minimum width=3em,
+    font=\linespread{0.84}\selectfont,
+% tree
+    grow'=0,
+    parent anchor=east,
+    child  anchor=west,
+    s sep = 4mm,    
+    l sep = 12mm, 
+% edge
+    edge = {semithick},
+% level styles
+if level = 0{}{rounded corners=2ex},
+where n children=0{tier=level, sharp corners}{calign=edge midpoint},
+% edge labels
+EL/.style={edge label={node [pos=0.5, fill=white,
+                             font=\scriptsize\sffamily,
+                             inner sep=2pt] {$#1$}}
+                    }
+            }% end for tree
+[,coordinate
+ [NP1\\ attachment,no edge
+    [recollection\\ certainty, EL=r
+        ["NP1"]
+    ]
+    [recollection\\ uncertainity, EL=1-r,
+        [guess "NP1", tier=L1, EL=g,
+            ["NP1"]
+        ]
+        [guess "NP2", tier=L1, EL=1-g
+            ["NP2"]
+        ]
+    ]
+  ]
+  [,coordinate, no edge]
+  [NP2\\ attachment,no edge
+    [recollection\\ certainty, EL=r
+        ["NP2"]
+    ]
+    [recollection\\ uncertainity, EL=1-r,
+        [guess "NP1", tier=L1, EL=g,
+            ["NP1"]
+        ]
+        [guess "NP2", tier=L1, EL=1-g
+            ["NP2"]
+        ]
+    ]
+ ]
+ [,coordinate, no edge]
+  [ambiguous\\ attachment,no edge
+    [recollection\\ certainity, EL=r,
+        [preference for "NP1", tier=L1, EL=q,
+            ["NP1"]
+        ]
+        [preference for "NP2", tier=L1, EL=1-q
+            ["NP2"]
+        ]
+    ]
+    [recollection\\ uncertainity, EL=1-r,
+        [guess "NP1", tier=L1, EL=g,
+            ["NP1"]
+        ]
+        [guess "np2", tier=L1, EL=1-g
+            ["NP2"]
+        ]
+    ]
+ ]
+]
+\end{forest}
+
+\hypertarget{the-predictions}{%
+\subsubsection{The predictions}\label{the-predictions}}
+
+In equations \eqref{eq:pNp1Np1}, \eqref{eq:pNp1Np2}, \eqref{eq:pNp1Amb} xxx.
+
+\begin{equation}
+P("NP1"|NP1) = r + (1-r) \cdot g
+\label{eq:pNp1Np1}
+\end{equation}
+
+\begin{equation}
+P("NP1"|NP2) = (1-r) \cdot g
+\label{eq:pNp1Np2}
+\end{equation}
+
+\begin{equation}
+P("NP1"|ambiguous) = r\cdot q + (1-r) \cdot g
+\label{eq:pNp1Amb}
+\end{equation}
+
+\hypertarget{naive-estimation-simple-conditions}{%
+\subsubsection{Naive estimation, simple conditions}\label{naive-estimation-simple-conditions}}
+
+\begin{itemize}
+\tightlist
+\item
+  Let's use the numbers above as estimates of \(P("NP1"|NP1)\), \(P("NP1"|NP2)\), and \(P("NP1"|ambiguous)\):
+\end{itemize}
+
+\begin{align*}
+  0.905 &= r_s + (1-r_s) \cdot g_s \\ 
+  0.227 &= (1-r_s) \cdot g_s \\ 
+  0.668 &= r_s\cdot q_s + (1-r_s) \cdot g_s
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  This means:
+\end{itemize}
+
+\begin{align*}
+  r_s &= 0.678 \\ 
+  g_s &= 0.705 \\ 
+  q_s &= 0.650
+\end{align*}
+
+\hypertarget{naive-estimation-complex-conditions}{%
+\subsubsection{Naive estimation, complex conditions}\label{naive-estimation-complex-conditions}}
+
+\begin{itemize}
+\tightlist
+\item
+  Let's apply the same logic here, too:
+\end{itemize}
+
+\begin{align*}
+  0.919 &= r_c + (1-r_c) \cdot g_c \\ 
+  0.241 &= (1-r_c) \cdot g_c \\ 
+  0.750 &= r_c \cdot q_c + (1-r_c) \cdot g_c
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  This means:
+\end{itemize}
+
+\begin{align*}
+  r_c &= 0.678 \\ 
+  g_c &= 0.748 \\
+  q_c &= 0.751
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  The parameters \(q_s\) and \(q_c\) differ by \(0.1\), which is more than the difference between ambiguous conditions (\(0.08\)).
+\item
+  The fact that \(g_s\) and \(g_c\) differ substantially is quite certainly a problem.
+\item
+  Complexity shouldn't influence g, by definition. Are potentially additional mechanisms at work, or is this just sampling error? It's actually not unlikely that this is sampling error, especially due to the fact that spellout.net doesn't properly balance participants across Latin-square lists.\\
+\item
+  Can we even compare \(q\)s, given this difference in \(g\)s?
+\end{itemize}
+
+\begin{center}
+\begin{figure}
+\begin{forest}
+for tree = {
+% nodes
+    draw, 
+    align=center,
+    minimum height=5ex,
+    minimum width=3em,
+    font=\linespread{0.84}\selectfont,
+% tree
+    grow'=0,
+    parent anchor=east,
+    child  anchor=west,
+    s sep = 4mm,    
+    l sep = 12mm, 
+% edge
+    edge = {semithick},
+% level styles
+if level = 0{}{rounded corners=2ex},
+where n children=0{tier=level, sharp corners}{calign=edge midpoint},
+% edge labels
+EL/.style={edge label={node [pos=0.5, fill=white,
+                             font=\sffamily,
+                             inner sep=2pt] {$#1$}}
+                    }
+            }% end for tree
+[,coordinate
+  [grammatical\\ sentence,no edge
+        [attentive\\ state, EL=a
+            ['acceptable']
+        ]
+        [inattentive\\ state, EL=1-a,
+            ['acceptable', EL=g ]
+            ['not acceptable', EL=1-g]
+        ]
+  ]
+  [grammatical\\ sentence,no edge
+        [attentive\\ state, EL=a
+            ['not acceptable']
+        ]
+        [inattentive\\ state, EL=1-a,
+            ['acceptable', EL=g ]
+            ['not acceptable', EL=1-g]
+        ]
+  ]
+]
+\end{forest}
+\caption{An MPT model of question answering with equal error rates for (i) N1 attachment, (ii) N2 attachment, and (iii) ambiguous sentences. }
+\label{fig:mpt1}
+\end{figure}
+\end{center}
+
+\end{document}
