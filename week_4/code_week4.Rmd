@@ -99,40 +99,34 @@ question_responses_n_summary_en %>% ggplot(aes(question_np, perc_yes, color = at
 
 - Let's model the the Dillon and Wagers (2019) phenomenon in the form of a multinomial processing tree model.
 
-![image](ex/mpt_ex.jpeg)
+![image](ex/x.png)
 
 
 $$
-P_{Y,G} = 
+P_{Y,G} = a \cdot 1 + (1-a)\cdot g
 $$
 
 $$
-P_{N,G} = 
+P_{N,G} = (1-a)\cdot(1-g)
 $$
 
 
 $$
-P_{Y,U} = 
+P_{Y,U} = (1-a)\cdot g
 $$
 
 $$
-P_{Y,U} = 
+P_{N,U} = a + (1-a)\cdot (1-g)
 $$
 
 - Let's write down the probabilities of 'acceptable' and 'unacceptable' responses by condition, 
 
 ```{r}
-prob_yes_gram <- function() {
-  
+prob_yes_gram <- function(a, g) {
+  a + (1-a)*g
 }
-prob_no_gram <- function() {
-  
-}
-prob_yes_ungram <- function() {
-  
-}
-prob_no_ungram <- function() {
-  
+prob_yes_ungram <- function(a, g) {
+  (1-a)*g  
 }
 ```
 
@@ -141,10 +135,24 @@ prob_no_ungram <- function() {
 
 ```{r}
 
-generate_mpt_dataset <- function() {
+generate_mpt_dataset <- function(n, a, g)
+{
+  # generate responses for gram condition
+  prob_yes <- prob_yes_gram(a, g)
+  n_yes_gram <- rbinom(n = 1, size = n, prob = prob_yes)  
   
+  # generate responses for ungram condition
+  prob_yes <- prob_yes_ungram(a, g)
+  n_yes_ungram <- rbinom(n = 1, size = n, prob = prob_yes)
+  
+  # return as data frame
+  data.frame(condition = c("gram", "ungram"),
+             n_yes = c(n_yes_gram, n_yes_ungram),
+             n = n)
 }
 
+
+generate_mpt_dataset(n = 100, a=.5, g=.5)
 
 ```
 
@@ -155,11 +163,26 @@ generate_mpt_dataset <- function() {
 
 # Generate data for each combination of parameters
 
+all_results <- data.frame()
 
+for(cur_a in seq(0,1, .05)) {
+    for(cur_g in seq(0,1, .05)) {
+      dat <- generate_mpt_dataset(n = 10^4, a=cur_a, g=cur_g)
+      dat$a <- cur_a
+      dat$g <- cur_g
+      all_results <- rbind(all_results, dat)
+    }
+}
 
+head(all_results)
 
+all_results %<>% mutate(p_yes = n_yes/n) 
 
+all_results_plot <- all_results %>% dplyr::select(a, g, p_yes, condition) %>% tidyr::pivot_wider(names_from = condition, values_from = p_yes)
 
+head(all_results_plot)
+
+ggplot(all_results_plot, aes(gram, ungram)) + geom_point()
 
 ```
 
@@ -170,9 +193,12 @@ generate_mpt_dataset <- function() {
 
 # Let's take a look at the receiver operating characteristic (ROC)
 
+unique(all_results_plot$a)
 
+results_a_070809 <- all_results_plot %>% subset(round(a,2) %in% c(0.70, 0.8, .9))
+results_a_07
 
-
+ggplot(results_a_070809, aes(gram, ungram, color = as.factor(a) )) + geom_point() + geom_line()
 
 
 ```
@@ -183,12 +209,57 @@ generate_mpt_dataset <- function() {
 ```{r}
 
 # Generate a data set with known parameters (a=.8, g=.4)
-
+data_for_optimization <- all_results_plot %>% subset(round(a,2) == .8 & round(g,2) == .4)
 
 # Let's implement an objective function ('discrepancy function')
+# An objective function, reflects the 'badness of fit' of a model,
+# by quantifying the devation of each prediction from every data point.
+mpt_objective_function <- function(a, g) {
+  dev_gram <- (data_for_optimization$gram - prob_yes_gram(a, g))
+  dev_ungram <- (data_for_optimization$ungram - prob_yes_ungram(a, g))
+  sum_of_squared_devs <- dev_gram^2 + dev_ungram^2
+  mean_of_squared_devs <- sum_of_squared_devs/2
+  sqrt(mean_of_squared_devs)
+}
+
+# Let's try it with 'true' params :
+mpt_objective_function(a = .8, g = .4)
+
+# Let's try it with 'wrong' params :
+mpt_objective_function(a = .2, g = .4)
+mpt_objective_function(a = .8, g = .2)
+# ...
 
 
-# Let's implement a simplex-like search
+# Let's implement a simplex-like search for only 'a'
+mpt_objective_function_for_only_a <- function(a) {
+  mpt_objective_function(a = a, g = .4)
+}
+
+
+obj_fn_df <- data.frame(a = seq(0,1, .01),
+                        obj_fn_val = mpt_objective_function_for_only_a(seq(0,1, .01))
+                        )
+
+start_a <- runif(n = 1, min = .1, max=.9)
+cur_a = start_a
+
+{
+epsilon <- runif(n = 1, min = 0, max=0.05)
+
+val_cur <- mpt_objective_function_for_only_a(cur_a)
+val_left <- mpt_objective_function_for_only_a(cur_a-epsilon)
+val_right <- mpt_objective_function_for_only_a(cur_a+epsilon)
+if (val_left < val_cur) {
+  cur_a <- cur_a-epsilon
+  val_cur <- val_left
+} else { # assumption that if not val_left < val_cur, then val_right < val_cur
+  cur_a <- cur_a+epsilon
+  val_cur <- val_right
+}
+
+obj_fn_df %>% ggplot(aes(a, obj_fn_val)) + geom_line() + geom_point(aes(x = cur_a, y = val_cur), color = "red")
+} 
 
 
 ```
@@ -198,7 +269,6 @@ generate_mpt_dataset <- function() {
 
 
 ```{r}
-
 
 # Let's implement an objective function ('discrepancy function')
 

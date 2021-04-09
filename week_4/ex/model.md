@@ -225,7 +225,7 @@ EL/.style={edge label={node [pos=0.5, fill=white,
             ['not acceptable', EL=1-g]
         ]
   ]
-  [grammatical\\ sentence,no edge
+  [ungrammatical\\ sentence,no edge
         [attentive\\ state, EL=a
             ['not acceptable']
         ]
