@@ -67,16 +67,6 @@ plot(f2, xlim = c(50,70))
 
 
 
-plot(sqrt)
-
-
-plot(function(x) dnorm(x, mean = 0, sd = 1), xlim = c(-5,5) )
-plot(function(x) pnorm(x, mean = 0, sd = 1), xlim = c(-5,5) )
-
-
-dnorm(-1, mean = 0, sd = 1)
-
-
 # use optim to find the the parameters with the highest likelihood
 
 # increase the size of the data set
