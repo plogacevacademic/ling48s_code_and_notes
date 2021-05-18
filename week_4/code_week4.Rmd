@@ -1,7 +1,9 @@
 ---
 title: "Week 3?"
-output: html_notebook
-editor_options: 
+output:
+  html_document:
+    df_print: paged
+editor_options:
   chunk_output_type: console
 ---
 
@@ -196,7 +198,7 @@ ggplot(all_results_plot, aes(gram, ungram)) + geom_point()
 unique(all_results_plot$a)
 
 results_a_070809 <- all_results_plot %>% subset(round(a,2) %in% c(0.70, 0.8, .9))
-results_a_07
+results_a_070809
 
 ggplot(results_a_070809, aes(gram, ungram, color = as.factor(a) )) + geom_point() + geom_line()
 
